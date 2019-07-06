@@ -33,14 +33,22 @@ from api.api_class import API
 handler = API(token='***')
 user_info = handler.get_user_info('kailunfan')
 repo_info = handler.get_repo('kailunfan', 'githubApiTest')
+
+# 需要传入payload时用data接收
+data = {
+    "message": "new file",
+    "content": base64.b64encode("this is the original content!".encode()).decode()
+}
+file_info = handler.set_file("kailunfan", "githubApiTest", "src/test_set_file2.txt", data=data)
 ```
 
 ## API 配置文件说明
 
 - 所有的 API 方法在 `config/api_config.py` 文件中定义, 在创建类时动态生成;
--  以上述配置文件中`get_issuess`为例:
+- 以上述配置文件中`get_issuess`为例:
   - 字典 api 中一级 key 和二级 key 共同组成请求 url;
   - 通过方法名`get_issuess`推断出HTTP请求方法为`get`;
   - {user_name}和{repo_name}表示位置参数,调用的时候需按顺序传入;
   - {state:open} 表示关键字参数;
   - 调用传参如下: `handler.get_issuess("kailunfan", "githubApiTest", state="closed")`
+- 需要传入payload时用data关键字接收,类型为dict.
